@@ -1,0 +1,330 @@
+<Window x:Class="MyAutoSuperFastClicker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MyAutoSuperFastClicker - Ultra Fast Game Clicker"
+        Height="730" Width="560"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        Background="#0F172A"
+        Foreground="#F8FAFC"
+        FontFamily="Segoe UI, Segoe UI Variable Display, sans-serif"
+        TextOptions.TextFormattingMode="Display"
+        RenderOptions.ClearTypeHint="Enabled">
+
+    <Window.Resources>
+        <!-- Dark Theme Colors -->
+        <SolidColorBrush x:Key="BgDark" Color="#0F172A"/>
+        <SolidColorBrush x:Key="CardBg" Color="#1E293B"/>
+        <SolidColorBrush x:Key="CardBorder" Color="#334155"/>
+        <SolidColorBrush x:Key="InputBg" Color="#0F172A"/>
+        <SolidColorBrush x:Key="InputBorder" Color="#475569"/>
+        <SolidColorBrush x:Key="AccentCyan" Color="#06B6D4"/>
+        <SolidColorBrush x:Key="AccentCyanHover" Color="#22D3EE"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#94A3B8"/>
+        <SolidColorBrush x:Key="StatusGreen" Color="#10B981"/>
+        <SolidColorBrush x:Key="StatusGreenBg" Color="#064E3B"/>
+        <SolidColorBrush x:Key="StatusRed" Color="#EF4444"/>
+        <SolidColorBrush x:Key="StatusRedBg" Color="#7F1D1D"/>
+
+        <!-- Modern Button Style -->
+        <Style x:Key="PrimaryActionBtn" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="QuickBtn" TargetType="Button">
+            <Setter Property="Background" Value="#334155"/>
+            <Setter Property="Foreground" Value="#E2E8F0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#475569"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource InputBg}"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="{StaticResource InputBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentCyan}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernRadio" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="#E2E8F0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Big Action Banner / Stats -->
+            <RowDefinition Height="Auto"/>
+            <!-- Settings Cards Area -->
+            <RowDefinition Height="*"/>
+            <!-- Footer Info -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- TOP BAR: Title & Always On Top -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,14" LastChildFill="False">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                <TextBlock Text="⚡" FontSize="22" Margin="0,0,8,0" Foreground="{StaticResource AccentCyan}"/>
+                <TextBlock Text="SUPER FAST CLICKER" FontSize="18" FontWeight="ExtraBold" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                <CheckBox x:Name="ChkAlwaysOnTop" Content="Always on Top" Foreground="{StaticResource TextMuted}" 
+                          VerticalAlignment="Center" Margin="0,0,10,0" Checked="ChkAlwaysOnTop_Changed" Unchecked="ChkAlwaysOnTop_Changed"/>
+                <Border Background="#1E293B" CornerRadius="6" Padding="8,4" BorderBrush="{StaticResource CardBorder}" BorderThickness="1">
+                    <TextBlock Text="Hotkey: F6" FontSize="12" FontWeight="Bold" Foreground="{StaticResource AccentCyan}"/>
+                </Border>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- ACTION HERO BANNER & STATS -->
+        <Border Grid.Row="1" Background="{StaticResource CardBg}" CornerRadius="12" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" Padding="14" Margin="0,0,0,14">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Big Toggle Button -->
+                <Button x:Name="BtnStartStop" Grid.Row="0" Style="{StaticResource PrimaryActionBtn}" Background="{StaticResource StatusGreen}" 
+                        Click="BtnStartStop_Click" Height="48" Margin="0,0,0,12">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock x:Name="TxtBtnIcon" Text="▶" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtBtnLabel" Text="START CLICKING (F6)" FontSize="15" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Live Metrics Grid -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Status -->
+                    <Border Grid.Column="0" Background="#0F172A" CornerRadius="8" Padding="10,6" Margin="0,0,4,0">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="STATUS" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="TxtStatusBadge" Text="IDLE" FontSize="14" FontWeight="ExtraBold" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Live CPS -->
+                    <Border Grid.Column="1" Background="#0F172A" CornerRadius="8" Padding="10,6" Margin="4,0,4,0">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="LIVE SPEED" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="TxtLiveCps" Text="0 CPS" FontSize="14" FontWeight="ExtraBold" Foreground="{StaticResource AccentCyan}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Total Clicks -->
+                    <Border Grid.Column="2" Background="#0F172A" CornerRadius="8" Padding="10,6" Margin="4,0,0,0">
+                        <Grid>
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="TOTAL CLICKS" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="TxtTotalClicks" Text="0" FontSize="14" FontWeight="ExtraBold" Foreground="#F8FAFC" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Button Content="↺" ToolTip="Reset Clicks" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                                    Background="Transparent" BorderThickness="0" Foreground="{StaticResource TextMuted}" Cursor="Hand" Click="BtnResetStats_Click" FontSize="13" Padding="2,0"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- CONFIGURATION CARDS -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- CARD 1: CLICK SPEED -->
+                <Border Background="{StaticResource CardBg}" CornerRadius="10" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" Padding="14" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="⚡ CLICK SPEED &amp; RATE" FontWeight="Bold" FontSize="13" Foreground="{StaticResource AccentCyan}" Margin="0,0,0,10"/>
+
+                        <!-- Option: Turbo Mode -->
+                        <RadioButton x:Name="RbSpeedTurbo" Style="{StaticResource ModernRadio}" GroupName="SpeedMode" Margin="0,0,0,8" Checked="SpeedMode_Changed">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🚀 UNCHOPPED TURBO (Max Speed)" FontWeight="Bold" Foreground="#F59E0B"/>
+                                <TextBlock Text=" - Up to 1,000+ CPS" Foreground="{StaticResource TextMuted}" Margin="4,0,0,0"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <!-- Option: Target CPS -->
+                        <RadioButton x:Name="RbSpeedCps" Style="{StaticResource ModernRadio}" GroupName="SpeedMode" IsChecked="True" Margin="0,0,0,6" Checked="SpeedMode_Changed">
+                            <TextBlock Text="🎯 Target CPS (Clicks Per Second)" FontWeight="SemiBold"/>
+                        </RadioButton>
+                        
+                        <Grid Margin="20,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TbTargetCps" Grid.Column="0" Style="{StaticResource ModernTextBox}" Text="100" TextChanged="ConfigInput_Changed"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0,0,0">
+                                <Button Content="20" Style="{StaticResource QuickBtn}" Click="QuickCps_Click"/>
+                                <Button Content="50" Style="{StaticResource QuickBtn}" Click="QuickCps_Click"/>
+                                <Button Content="100" Style="{StaticResource QuickBtn}" Click="QuickCps_Click"/>
+                                <Button Content="250" Style="{StaticResource QuickBtn}" Click="QuickCps_Click"/>
+                                <Button Content="500" Style="{StaticResource QuickBtn}" Click="QuickCps_Click"/>
+                                <Button Content="1000" Style="{StaticResource QuickBtn}" Click="QuickCps_Click"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Option: Interval ms -->
+                        <RadioButton x:Name="RbSpeedInterval" Style="{StaticResource ModernRadio}" GroupName="SpeedMode" Margin="0,0,0,6" Checked="SpeedMode_Changed">
+                            <TextBlock Text="⏱ Fixed Interval Delay (Milliseconds)" FontWeight="SemiBold"/>
+                        </RadioButton>
+                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                            <TextBox x:Name="TbIntervalMs" Style="{StaticResource ModernTextBox}" Width="100" Text="10" TextChanged="ConfigInput_Changed"/>
+                            <TextBlock Text="ms between clicks" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- CARD 2: MOUSE OPTIONS -->
+                <Border Background="{StaticResource CardBg}" CornerRadius="10" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" Padding="14" Margin="0,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Mouse Button -->
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="🖱 MOUSE BUTTON" FontWeight="Bold" FontSize="13" Foreground="{StaticResource AccentCyan}" Margin="0,0,0,8"/>
+                            <RadioButton x:Name="RbBtnLeft" Content="Left Button" Style="{StaticResource ModernRadio}" GroupName="MouseButton" IsChecked="True" Margin="0,0,0,6"/>
+                            <RadioButton x:Name="RbBtnRight" Content="Right Button" Style="{StaticResource ModernRadio}" GroupName="MouseButton" Margin="0,0,0,6"/>
+                            <RadioButton x:Name="RbBtnMiddle" Content="Middle Button" Style="{StaticResource ModernRadio}" GroupName="MouseButton"/>
+                        </StackPanel>
+
+                        <!-- Click Type -->
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Text="👆 CLICK TYPE" FontWeight="Bold" FontSize="13" Foreground="{StaticResource AccentCyan}" Margin="0,0,0,8"/>
+                            <RadioButton x:Name="RbTypeSingle" Content="Single Click" Style="{StaticResource ModernRadio}" GroupName="ClickType" IsChecked="True" Margin="0,0,0,6"/>
+                            <RadioButton x:Name="RbTypeDouble" Content="Double Click" Style="{StaticResource ModernRadio}" GroupName="ClickType"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- CARD 3: CLICK LOCATION -->
+                <Border Background="{StaticResource CardBg}" CornerRadius="10" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" Padding="14" Margin="0,0,0,12">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,10">
+                            <TextBlock Text="📍 CLICK POSITION" FontWeight="Bold" FontSize="13" Foreground="{StaticResource AccentCyan}" DockPanel.Dock="Left"/>
+                            <TextBlock x:Name="TxtCurrentCursorPos" Text="Cursor: X=0, Y=0" FontSize="11" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Right" DockPanel.Dock="Right"/>
+                        </DockPanel>
+
+                        <!-- Current Cursor -->
+                        <RadioButton x:Name="RbLocCurrent" Style="{StaticResource ModernRadio}" GroupName="LocationMode" IsChecked="True" Margin="0,0,0,8" Checked="LocationMode_Changed">
+                            <TextBlock Text="Current Cursor Location (clicks where mouse moves)" FontWeight="SemiBold"/>
+                        </RadioButton>
+
+                        <!-- Fixed Location -->
+                        <RadioButton x:Name="RbLocFixed" Style="{StaticResource ModernRadio}" GroupName="LocationMode" Margin="0,0,0,8" Checked="LocationMode_Changed">
+                            <TextBlock Text="Fixed Screen Coordinates" FontWeight="SemiBold"/>
+                        </RadioButton>
+
+                        <Grid Margin="20,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="X:" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{StaticResource TextMuted}" FontWeight="Bold"/>
+                            <TextBox x:Name="TbFixedX" Grid.Column="1" Style="{StaticResource ModernTextBox}" Text="0" IsEnabled="False" TextChanged="ConfigInput_Changed"/>
+
+                            <TextBlock Grid.Column="2" Text="Y:" VerticalAlignment="Center" Margin="12,0,6,0" Foreground="{StaticResource TextMuted}" FontWeight="Bold"/>
+                            <TextBox x:Name="TbFixedY" Grid.Column="3" Style="{StaticResource ModernTextBox}" Text="0" IsEnabled="False" TextChanged="ConfigInput_Changed"/>
+
+                            <Button x:Name="BtnPickLocation" Grid.Column="4" Content="🎯 Pick (F7)" Style="{StaticResource QuickBtn}" 
+                                    Margin="12,0,0,0" Padding="10,6" Click="BtnPickLocation_Click" IsEnabled="False"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- CARD 4: REPEAT CONTROL -->
+                <Border Background="{StaticResource CardBg}" CornerRadius="10" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" Padding="14">
+                    <StackPanel>
+                        <TextBlock Text="🔁 REPEAT CONDITION" FontWeight="Bold" FontSize="13" Foreground="{StaticResource AccentCyan}" Margin="0,0,0,10"/>
+
+                        <RadioButton x:Name="RbRepeatInfinite" Content="Repeat until stopped (Infinite / Hotkey F6)" Style="{StaticResource ModernRadio}" 
+                                     GroupName="RepeatMode" IsChecked="True" Margin="0,0,0,8" Checked="RepeatMode_Changed"/>
+
+                        <RadioButton x:Name="RbRepeatCount" Style="{StaticResource ModernRadio}" GroupName="RepeatMode" Checked="RepeatMode_Changed">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Stop after exact number of clicks:" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TbRepeatCount" Style="{StaticResource ModernTextBox}" Width="90" Text="1000" Margin="8,0,0,0" IsEnabled="False" TextChanged="ConfigInput_Changed"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- FOOTER BAR -->
+        <Border Grid.Row="3" Margin="0,10,0,0">
+            <DockPanel LastChildFill="False">
+                <TextBlock Text="Press F6 anywhere to Start / Stop | Press F7 to lock coordinates" 
+                           Foreground="{StaticResource TextMuted}" FontSize="11" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                <TextBlock Text="v1.0.0" Foreground="#475569" FontSize="11" DockPanel.Dock="Right" VerticalAlignment="Center"/>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>
